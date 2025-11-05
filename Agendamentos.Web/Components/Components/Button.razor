@@ -1,0 +1,12 @@
+﻿<button @onclick="OnClick" disabled="@Disabled">
+	@Text
+</button>
+
+@code {
+	[Parameter] // Anotação
+	public string? Text { get; set; } // Propriedade - é uma informação de um classe
+	[Parameter]
+	public bool Disabled { get; set; } = false;
+	[Parameter]
+	public EventCallback OnClick { get; set; }
+}

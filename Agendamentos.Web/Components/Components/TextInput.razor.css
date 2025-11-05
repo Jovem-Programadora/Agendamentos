@@ -1,0 +1,41 @@
+﻿div {
+    /* Layout */
+    width: 340px;
+    padding: 12px;
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    flex-direction: row;
+    /* Aparencia */
+    border: 1px solid var(--gray-500);
+    /* Outros */
+    gap: 8px;
+    border-radius: 8px;
+}
+
+    div:focus-within {
+        /* Aparencia */
+        border: 1px solid var(--yellow);
+    }
+
+svg {
+    color: var(--yellow);
+}
+
+input {
+    /* Layout */
+    flex-grow: 1;
+    /* Aparencia */
+    border: 0px;
+    color: var(--gray-200);
+    background-color: transparent;
+}
+
+    input:focus {
+        /* Aparencia */
+        outline: none;
+    }
+
+    input::placeholder {
+        color: var(--gray-400);
+    }

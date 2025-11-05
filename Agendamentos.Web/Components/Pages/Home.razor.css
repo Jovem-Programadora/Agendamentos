@@ -1,0 +1,38 @@
+﻿#container {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+#schedule {
+    width: 100%;
+    height: 100%;
+    padding: 80px;
+    max-width: 498px;
+    background-color: var(--gray-700);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-radius: 12px;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.gray-100 {
+    color: var(--gray-100);
+}
+
+.gray-200 {
+    color: var(--gray-200);
+}
+
+.gray-300 {
+    color: var(--gray-300);
+}

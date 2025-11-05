@@ -1,0 +1,43 @@
+﻿@page "/"
+
+<PageTitle>Agendamentos</PageTitle>
+
+<div id="container">
+
+	<div id="schedule">
+
+		<div id="title">
+			<h1 class="title_lg gray-100">Agende um atendimento</h1>
+			<p class="text_sm gray-300">Selecione data, horário e informe o nome do cliente para criar o agendamento</p>
+		</div>
+
+		<div id="form">
+
+			<div id="date">
+				<h1 class="title_md gray-200">Data</h1>
+				<TextInput></TextInput>
+			</div>
+
+			<div id="time">
+				<h1 class="title_md gray-200">Horário</h1>
+				<TextInput></TextInput>
+			</div>
+
+			<div id="client">
+				<h1 class="title_md gray-200">Cliente</h1>
+				<TextInput Placeholder="Nome do Cliente">
+					<IconContent>
+						<AccountBox />
+					</IconContent>
+				</TextInput>
+			</div>
+
+		</div>
+
+		<Button Text="Agendar"></Button>
+	</div>
+
+	<div id="appointments">
+	</div>
+
+</div>

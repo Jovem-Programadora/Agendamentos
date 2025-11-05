@@ -1,0 +1,35 @@
+﻿/* Referencia por tag */
+button {
+    /* Aparencia */
+    width: 340px; /* Largura do botão */
+    height: 54px; /* Altura do botão */
+    padding: 0px 16px; /* Padding 0px superior/inferior | 16px direita/esquerda */
+    background-color: #B8952E; /* Cor do botão */
+    /* Fonte */
+    font-size: 14px; /* Tamanho das letras */
+    line-height: 20px; /* Altura da linha */
+    font-weight: bold; /* Expessura das letras */
+    text-transform: uppercase; /* Letras em caixa alta */
+    /* Bordas */
+    border: 0px; /* Aqui é o tamanho da borda */
+    border-radius: 8px; /* Arredondamento das bordas */
+}
+
+    button:hover {
+        border: 2px solid #DBC170;
+    }
+
+    button:disabled {
+        opacity: 0.3;
+    }
+
+
+
+/* Daqui pra baixo nao copia */
+.botao {
+    /* Referencia por classe*/
+}
+
+/* Referencia por ID */
+#botao_agendar {
+}
