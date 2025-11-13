@@ -1,0 +1,18 @@
+﻿﻿<div>
+	<span style="color:var(--yellow);">@IconContent</span>
+	<input type="date" value="@Today" min="@Today" />
+	<KeyboardArrowDown></KeyboardArrowDown>
+</div>
+
+@code {
+	[Parameter]
+	public RenderFragment? IconContent { get; set; }
+	// Criar uma propriedade string que guarda a data atual no formato yyyy-MM-dd
+	private string Today = DateTime.Today.ToString("yyyy-MM-dd");
+
+
+	// DateTime.Today.ToString("Formato")
+
+
+}
+
