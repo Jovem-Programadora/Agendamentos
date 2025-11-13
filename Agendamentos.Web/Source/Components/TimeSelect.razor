@@ -1,5 +1,19 @@
-﻿<h3>TimeSelect</h3>
+﻿<label class="time-selector" aria-disabled="@(Disabled? "true": "false")">
+	<input class="input-select"
+		   type="radio"
+		   name="@Name"
+		   @onclick="OnClick"
+		   disabled=@Disabled />
+	<span class="text_md">@Time</span>
+</label>
 
 @code {
-
+	[Parameter]
+	public string Name { get; set; } = string.Empty;
+	[Parameter]
+	public bool Disabled { get; set; } = false;
+	[Parameter]
+	public string Time { get; set; } = "00:00";
+	[Parameter]
+	public EventCallback OnClick { get; set; }
 }

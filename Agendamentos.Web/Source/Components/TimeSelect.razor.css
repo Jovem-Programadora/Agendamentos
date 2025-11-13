@@ -1,0 +1,58 @@
+﻿.time-selector {
+    background: var(--gray-600);
+    border-radius: 8px;
+    border-style: solid;
+    border-color: var(--gray-500);
+    border-width: 1px;
+    width: 78.5px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+    display: flex; /* ativa o flexbox */
+    flex-wrap: wrap; /* permite quebrar linha */
+    gap: 8px; /* espaçamento entre os quadradinhos */
+    flex-direction: row;
+    justify-content: center; /* Alinha na horizontal */
+    align-items: center; /* Alinha na vertical */
+    cursor: pointer;
+}
+
+    .time-selector[aria-disabled="true"] {
+        background-color: transparent;
+        color: var(--gray-500);
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+.input-select {
+    /*appearance: none;*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Faz o input ocupar 0 espaço para não interferir no layout */
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute; /* Remove-o totalmente do fluxo de layout */
+}
+
+.time-selector:has(.input-select:checked) {
+    /* Aparencia */
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+}
+
+.time-selector:hover {
+    background: var(--gray-500);
+    color: var(--gray-200);
+}
+
+
+
+.text_md {
+    color: inherit;
+}
+
+.time-selector:disabled {
+    background-color: var(--gray-600);
+    color: var(--gray-400);
+}
