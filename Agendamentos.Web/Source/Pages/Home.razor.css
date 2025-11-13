@@ -25,6 +25,41 @@
     gap: 32px;
 }
 
+#agenda {
+    padding: 80px;
+    background-color: var(--gray-700);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-radius: 12px;
+    flex-grow: 1;
+}
+
+#agendamentos {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--gray-600);
+    border-radius: 8px;
+}
+
+#listas_header {
+    border-width: 1px;
+    border-style: solid;
+    padding: 20px;
+}
+
+#agendamentos_header {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 20px;
+}
+
+    #agendamentos_header p {
+        margin: 0px;
+    }
+
 #time_display {
     display: flex;
     flex-direction: row;
