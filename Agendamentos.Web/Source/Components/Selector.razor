@@ -1,0 +1,16 @@
+﻿<div class="content">
+	@IconContent
+	<select>
+		<option selected>Lavinia</option>
+		<option>Anna Julia</option>
+		<option>Georgia</option> 
+		<option>Gabriel	</option>
+	</select>
+</div>
+
+@code {
+	[Parameter]
+	public RenderFragment? IconContent { get; set; }
+	[Parameter]
+	public string? Placeholder { get; set; }
+}
