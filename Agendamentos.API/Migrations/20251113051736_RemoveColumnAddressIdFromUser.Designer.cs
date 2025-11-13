@@ -4,6 +4,7 @@ using Agendamentos.API.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Agendamentos.API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20251113051736_RemoveColumnAddressIdFromUser")]
+    partial class RemoveColumnAddressIdFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,48 @@ namespace Agendamentos.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Agendamentos.Biblioteca.Address", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Complement")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Neighborhood")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZIPCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("Addresses");
+                });
 
             modelBuilder.Entity("Agendamentos.Biblioteca.Appointment", b =>
                 {
@@ -185,6 +230,21 @@ namespace Agendamentos.API.Migrations
                     b.ToTable("Services");
                 });
 
+            modelBuilder.Entity("Agendamentos.Biblioteca.Address", b =>
+                {
+                    b.HasOne("Agendamentos.Biblioteca.Client", null)
+                        .WithOne("Address")
+                        .HasForeignKey("Agendamentos.Biblioteca.Address", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agendamentos.Biblioteca.Employee", null)
+                        .WithOne("Address")
+                        .HasForeignKey("Agendamentos.Biblioteca.Address", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Agendamentos.Biblioteca.Appointment", b =>
                 {
                     b.HasOne("Agendamentos.Biblioteca.Client", "Client")
@@ -225,11 +285,15 @@ namespace Agendamentos.API.Migrations
 
             modelBuilder.Entity("Agendamentos.Biblioteca.Client", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("Agendamentos.Biblioteca.Employee", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Appointments");
                 });
 

@@ -5,7 +5,6 @@ namespace Agendamentos.API.Database;
 
 public class APIContext(DbContextOptions<APIContext> optionsBuilder) : DbContext(optionsBuilder)
 {
-    public DbSet<Address> Addresses { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
@@ -15,7 +14,6 @@ public class APIContext(DbContextOptions<APIContext> optionsBuilder) : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configurando chave primária
-        modelBuilder.Entity<Address>().HasKey(a => a.ID);
         modelBuilder.Entity<Client>().HasKey(c => c.ID);
         modelBuilder.Entity<Employee>().HasKey(e => e.ID);
         modelBuilder.Entity<Appointment>().HasKey(a => a.ID);
