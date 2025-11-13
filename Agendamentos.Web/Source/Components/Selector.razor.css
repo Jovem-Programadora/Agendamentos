@@ -1,0 +1,28 @@
+﻿.content {
+    border: 1px solid var(--gray-500);
+    gap: 8px;
+    border-radius: 8px;
+    padding:12px;
+    display:flex;
+    flex-direction:row;
+}
+
+select{
+    flex-grow:1;
+    background:transparent;
+    color: var(--gray-200);
+    border: none;
+    outline: none;
+}
+
+div:focus-within {
+    border: 1px solid var(--yellow);
+}
+
+svg {
+    color: var(--yellow);
+}
+
+IconContent {
+    color: var(--yellow);
+}

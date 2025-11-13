@@ -60,6 +60,13 @@
         margin: 0px;
     }
 
+#time_display {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .gray-100 {
     color: var(--gray-100);
 }
