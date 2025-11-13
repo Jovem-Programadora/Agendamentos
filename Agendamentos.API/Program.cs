@@ -1,5 +1,6 @@
 using Agendamentos.API.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace Agendamentos.API;
 
@@ -16,7 +17,16 @@ public class Program
 		builder.Services.AddDbContext<APIContext>(optionsBuilder => optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen();
+		builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
+		builder.Services.AddSwaggerGen(options =>
+		{
+			options.MapType<DateOnly>(() => new OpenApiSchema
+			{
+				Type = "string",
+				Format = "date"
+			});
+		});
 
 		// Configuramos o APP já criado
 		var app = builder.Build();
