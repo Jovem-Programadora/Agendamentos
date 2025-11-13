@@ -1,19 +1,14 @@
-﻿namespace Agendamentos.Biblioteca;
+﻿using Agendamentos.Biblioteca.DTOs;
+
+namespace Agendamentos.Biblioteca;
 
 public class Role
 {
-    public int ID { get; private set; }
-    public string Name { get; private set; }
-    public List<Employee> Employees { get; set; }
+    public int ID { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public List<Employee>? Employees { get; set; }
 
-    public Role() { }
-    public Role(string name)
-    {
-        this.Name = name;
-    }
+    public Role() {}
 
-    public Role(string name, int id) : this(name)
-    {
-        this.ID = id;
-    }
+    public Role(RoleRegistrationDto dto) => Name = dto.Name;
 }

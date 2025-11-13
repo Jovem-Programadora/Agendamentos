@@ -8,21 +8,8 @@ public class Appointment
     public int ServiceID { get; set; }
     public DateTime ScheduledAt { get; set; }
 
-    public Client Client { get; set; }
-    public Employee Employee { get; set; }
-    public Service Service { get; set; }
+    public Client Client { get; set; } = new ();
+    public Employee Employee { get; set; } = new();
+    public Service Service { get; set; } = new();
 
-    public Appointment() { }
-    public Appointment(Client client, Employee employee, Service service, DateTime scheduleAt)
-    {
-        this.Client = client;
-        this.Employee = employee;
-        this.Service = service;
-        this.ScheduledAt = scheduleAt;
-    }
-
-    public Appointment(Client client, Employee employee, Service service, DateTime scheduledAt, int id) : this(client, employee, service, scheduledAt)
-    {
-        this.ID = id;
-    }
 }
