@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@using Agendamentos.Web.Source.Components
+@page "/"
 
 <PageTitle>Agendamentos</PageTitle>
 
@@ -47,6 +48,15 @@
 						<AccountBox />
 					</IconContent>
 				</TextInput>
+			</div>
+
+			<div id="employee">
+				<h1 class="title_md gray-200">Funcionário</h1>
+				<Selector> 
+					<IconContent>
+						<Badge />
+					</IconContent>
+				</Selector>
 			</div>
 
 		</div>
