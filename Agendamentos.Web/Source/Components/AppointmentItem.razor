@@ -1,0 +1,17 @@
+﻿<div class="lista_item">
+	<p class="horario">@Horario</p>
+	<p class="cliente">@Cliente</p>
+	<p class="func">@Funcionario</p>
+	<p class="valor">@PrecoTotal</p>
+</div>
+
+@code {
+	[Parameter]
+	public string Horario { get; set; } = "00:00";
+	[Parameter]
+	public string Cliente { get; set; } = "Cliente";
+	[Parameter]
+	public string Funcionario { get; set; } = "Funcionario";
+	[Parameter]
+	public string PrecoTotal { get; set; } = "Total";
+}

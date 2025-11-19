@@ -16,7 +16,7 @@
 
 			<div id="date">
 				<h1 class="title_md gray-200">Data</h1>
-				<DateInput>
+				<DateInput MinimumToday>
 					<IconContent>
 						<CalendarMonth />
 					</IconContent>
@@ -26,7 +26,7 @@
 			<div id="time">
 				<h1 class="title_md gray-200">Horários</h1>
 				<div id="time_display">
-					<TimeSelect Name="Time" Time="09:00" Disabled="true"/>
+					<TimeSelect Name="Time" Time="09:00" />
 					<TimeSelect Name="Time" Time="10:00" />
 					<TimeSelect Name="Time" Time="11:00" />
 					<TimeSelect Name="Time" Time="12:00" />
@@ -74,9 +74,17 @@
 	</div>
 
 	<div id="agenda">
-		<div id="agenda_header">
-			<h1 class="title_lg">Sua agenda</h1>
-			<p class="text_sm">Consulte os seus cortes de cabelo agendados por dia</p>
+		<div id="layout_header">
+			<div id="agenda_header">
+				<h1 class="title_lg">Sua agenda</h1>
+				<p class="text_sm">Consulte os seus cortes de cabelo agendados por dia</p>
+			</div>
+
+			<DateInput>
+				<IconContent>
+					<CalendarMonth />
+				</IconContent>
+			</DateInput>
 		</div>
 
 		<div id="agendamentos">
@@ -85,14 +93,13 @@
 				<p class="text_sm">Agendamentos</p>
 			</div>
 
-		<div id="listas">
-			<div id="listas_header">
-				<h1 class="title_md">Horário</h1>
-				<h1 class="title_md">Cliente</h1>
-				<h1 class="title_md">Funcionário</h1>
-
+			<div id="lista">
+				<span class="title_md gray-100"><AppointmentItem Horario="Horário" Cliente="Cliente" Funcionario="Funcionário" /></span>
+				@for (int contador = 1; contador < 13; contador++)
+				{
+					<span class="text_md gray-200">	<AppointmentItem Horario="10:00" Cliente="Gabriel" Funcionario="Carol" PrecoTotal="R$ 279,00" /> </span>
+				}
 			</div>
-		</div>
 
 		</div>
 

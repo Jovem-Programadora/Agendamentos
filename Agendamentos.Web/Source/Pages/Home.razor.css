@@ -1,4 +1,16 @@
-﻿#container {
+﻿.gray-100 {
+    color: var(--gray-100);
+}
+
+.gray-200 {
+    color: var(--gray-200);
+}
+
+.gray-300 {
+    color: var(--gray-300);
+}
+
+#container {
     width: 100%;
     height: 100%;
     padding: 12px;
@@ -25,6 +37,13 @@
     gap: 32px;
 }
 
+#time_display {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 #agenda {
     padding: 80px;
     background-color: var(--gray-700);
@@ -42,11 +61,6 @@
     border-radius: 8px;
 }
 
-#listas_header {
-    border-width: 1px;
-    border-style: solid;
-    padding: 20px;
-}
 
 #agendamentos_header {
     display: flex;
@@ -60,21 +74,12 @@
         margin: 0px;
     }
 
-#time_display {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-}
+    #lista {
+        padding: 20px;
+    }
 
-.gray-100 {
-    color: var(--gray-100);
-}
-
-.gray-200 {
-    color: var(--gray-200);
-}
-
-.gray-300 {
-    color: var(--gray-300);
+#layout_header{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
 }
