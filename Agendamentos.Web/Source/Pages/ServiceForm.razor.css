@@ -1,0 +1,28 @@
+﻿.pagina {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.conteudo {
+    padding: 60px;
+    border: 0px;
+    border-radius: 8px;
+    background-color: var(--gray-700);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.header {
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
