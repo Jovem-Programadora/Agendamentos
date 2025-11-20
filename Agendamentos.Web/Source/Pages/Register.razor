@@ -1,13 +1,21 @@
-﻿@page "/login"
+﻿@page "/register"
 
-<PageTitle>Entrar</PageTitle>
+<PageTitle>Cadastrar-se</PageTitle>
 
 <div class="pagina">
 
 	<div class="conteudo">
 
 		<div id="title">
-			<h1 class="text_xlg gray-100">Entrar</h1>
+			<h1 class="text_xlg gray-100">Cadastrar-se</h1>
+		</div>
+
+		<div id="Name">
+			<TextInput Placeholder="Nome">
+				<IconContent>
+					<AccountBox />
+				</IconContent>
+			</TextInput>
 		</div>
 
 		<div id="Email">
@@ -18,7 +26,7 @@
 			</TextInput>
 		</div>
 
-		<div id="passiwordiiihhh">
+		<div id="Senhaaaaaa">
 			<TextInput Placeholder="Senha">
 				<IconContent>
 					<Lock />
@@ -36,7 +44,7 @@
 
 		<div class="progap">
 			<Button Text="Registrar"></Button>
-			<span>Ainda não possui uma conta?<br /><a href="/register">Clique aqui para criar sua conta</a></span>
+			<span>Já tem uma conta?<br /><a href="/login">Clique aqui para fazer login</a></span>
 		</div>
 
 	</div>

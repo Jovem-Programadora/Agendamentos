@@ -49,6 +49,12 @@ html, body {
     font-weight: normal;
 }
 
+.text_xlg {
+    font-size: 36px;
+    line-height: 20px;
+    font-weight: normal;
+}
+
 main {
     color: var(--gray-100);
     background-color: var(--gray-800);
