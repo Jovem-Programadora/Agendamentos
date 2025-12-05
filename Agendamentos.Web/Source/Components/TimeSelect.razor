@@ -2,7 +2,9 @@
 	<input class="input-select"
 		   type="radio"
 		   name="@Name"
-		   @onclick="OnClick"
+		   value="@Time"
+		   @onchange="HandleChange"
+		   checked="@IsSelected"
 		   disabled=@Disabled />
 	<span class="text_md">@Time</span>
 </label>
@@ -14,6 +16,15 @@
 	public bool Disabled { get; set; } = false;
 	[Parameter]
 	public string Time { get; set; } = "00:00";
+
 	[Parameter]
-	public EventCallback OnClick { get; set; }
+	public bool IsSelected { get; set; }
+
+	[Parameter]
+	public EventCallback<string> TimeSelected { get; set; }
+
+	private Task HandleChange()
+	{
+		return TimeSelected.InvokeAsync(Time);
+	}
 }

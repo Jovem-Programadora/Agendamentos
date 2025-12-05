@@ -1,211 +1,212 @@
 ﻿@using Agendamentos.Web.Source.Components
 @using System.Text.Json
 @using System.Threading.Tasks
+@rendermode InteractiveServer
+@inject NavigationManager NavManager
 @page "/"
 
 <PageTitle>Agendamentos</PageTitle>
 
 <div id="container">
 
-    <div id="schedule">
+	<div id="schedule">
 
-        <div id="title">
-            <h1 class="title_lg gray-100">Agende um atendimento</h1>
-            <p class="text_sm gray-300">Selecione data, horário e informe o nome do cliente para criar o agendamento</p>
-        </div>
+		<div id="title">
+			<h1 class="title_lg gray-100">Agende um atendimento</h1>
+			<p class="text_sm gray-300">Selecione data, horário e informe o nome do cliente para criar o agendamento</p>
+		</div>
 
-        <div id="form">
+		<div id="form">
 
-            <div id="date">
-                <h1 class="title_md gray-200">Data</h1>
-                <DateInput MinimumToday>
-                    <IconContent>
-                        <CalendarMonth />
-                    </IconContent>
-                </DateInput>
-            </div>
+			<div id="date">
+				<h1 class="title_md gray-200">Data</h1>
+				<DateInput MinimumToday Value="SelectedDate" ValueChanged="FormDateChanged">
+					<IconContent>
+						<CalendarMonth />
+					</IconContent>
+				</DateInput>
+			</div>
 
-            <div id="time">
-                <h1 class="title_md gray-200">Horários</h1>
-                <div id="time_display">
-                    <TimeSelect Name="Time" Time="09:00" />
-                    <TimeSelect Name="Time" Time="10:00" />
-                    <TimeSelect Name="Time" Time="11:00" />
-                    <TimeSelect Name="Time" Time="12:00" />
-                    <TimeSelect Name="Time" Time="13:00" />
-                    <TimeSelect Name="Time" Time="14:00" />
-                    <TimeSelect Name="Time" Time="15:00" />
-                    <TimeSelect Name="Time" Time="16:00" />
-                    <TimeSelect Name="Time" Time="17:00" />
-                    <TimeSelect Name="Time" Time="18:00" />
-                    <TimeSelect Name="Time" Time="19:00" />
-                    <TimeSelect Name="Time" Time="20:00" />
-                </div>
-            </div>
+			<div id="time">
+				<h1 class="title_md gray-200">Horários</h1>
+				<div id="time_display">
+					@foreach (var timeSlot in AvailableTimeSlots)
+					{
+						<TimeSelect Name="Time"
+									Time="@timeSlot"
+									IsSelected="@(SelectedTime == timeSlot)"
+									TimeSelected="SelectTime" />
 
-            <div id="service">
-                <h1 class="title_md gray-200">Serviço</h1>
-                @* <Selector Options="@ServicesDictionary" Placeholder="Selecione um serviço">
-                    <IconContent>
-                        <Concierge />
-                    </IconContent>
-                </Selector> *@
-            </div>
+					}
+				</div>
+			</div>
 
-            <div id="employee">
-                <h1 class="title_md gray-200">Funcionário</h1>
-                <EmployeSelector />
-            </div>
+			<div id="service">
+				<h1 class="title_md gray-200">Serviço</h1>
+				<ServiceSelector @bind-SelectedId="SelectedServiceId" />
+			</div>
 
-            <div id="client">
-                <h1 class="title_md gray-200">Cliente</h1>
-                <ClientSelector />
-            </div>
+			<div id="employee">
+				<h1 class="title_md gray-200">Funcionário</h1>
+				<EmployeSelector @bind-SelectedId="SelectedEmployeeId" />
+			</div>
+
+			<div id="client">
+				<h1 class="title_md gray-200">Cliente</h1>
+				<ClientSelector @bind-SelectedId="SelectedClientId" />
+			</div>
 
 
-        </div>
+		</div>
 
-        <Button Text="Agendar"></Button>
-    </div>
+		<Button Text="Agendar" OnClick="CreateAppointmentAsync"></Button>
+	</div>
 
-    <div id="agenda">
-        <div id="layout_header">
-            <div id="agenda_header">
-                <h1 class="title_lg">Sua agenda</h1>
-                <p class="text_sm">Consulte os seus cortes de cabelo agendados por dia</p>
-            </div>
+	<div id="agenda">
+		<div id="layout_header">
+			<div id="agenda_header">
+				<h1 class="title_lg">Sua agenda</h1>
+				<p class="text_sm">Consulte os seus agendamentos de serviço por dia</p>
+			</div>
 
-            <DateInput>
-                <IconContent>
-                    <CalendarMonth />
-                </IconContent>
-            </DateInput>
-        </div>
+			<DateInput Value="FilterDate" ValueChanged="FilterDateChanged">
+				<IconContent>
+					<CalendarMonth />
+				</IconContent>
+			</DateInput>
+		</div>
 
-        <div id="agendamentos">
-            <div id="agendamentos_header">
-                <span style="color:var(--yellow-dark);"><CalendarToday /></span>
-                <p class="text_sm">Agendamentos</p>
-            </div>
+		<div id="agendamentos">
+			<div id="agendamentos_header">
+				<span style="color:var(--yellow-dark);"><CalendarToday /></span>
+				<p class="text_sm">Agendamentos</p>
+			</div>
 
-            <div id="lista">
-                <span class="title_md gray-100"><AppointmentItem Horario="Horário" Cliente="Cliente" Funcionario="Funcionário" /></span>
-                @if (Appointments.Count < 1)
-                {
-                    <span class="text_md gray-200">Nenhum agendamento encontrado</span>
-                }
-                else
-                {
-                    foreach (var appointment in Appointments)
-                    {
-                        <span class="text_md gray-200">
-                            <AppointmentItem Horario="@appointment.ScheduledAt.ToString("t")"
-                                             Cliente="@appointment.ClientName"
-                                             Funcionario="@appointment.EmployeeName"
-                                             PrecoTotal="@appointment.TotalPrice.ToString("C")" />
-                        </span>
-                    }
-                }
-            </div>
+			<div id="lista">
+				<span class="title_md gray-100"><AppointmentItem Horario="Horário" Cliente="Cliente" Funcionario="Funcionário" /></span>
+				@if (Appointments.Count < 1)
+				{
+					<span class="text_md gray-200">Nenhum agendamento encontrado</span>
+				}
+				else
+				{
+					foreach (var appointment in Appointments)
+					{
+						<span class="text_md gray-200">
+							<AppointmentItem Horario="@appointment.ScheduledAt.ToString("t")"
+											 Cliente="@appointment.ClientName"
+											 Funcionario="@appointment.EmployeeName"
+											 Service="@appointment.ServiceName"
+											 PrecoTotal="@appointment.TotalPrice.ToString("C")" />
+						</span>
+					}
+				}
+			</div>
 
-        </div>
+		</div>
 
-    </div>
+	</div>
 
 </div>
 
 @code {
-    [Inject]
-    private IHttpClientFactory _httpClientFactory { get; set; } = default!;
+	[Inject]
+	private IHttpClientFactory _httpClientFactory { get; set; } = default!;
 
-    public List<ServiceDto>? Services { get; set; }
-    public List<AppointmentDto> Appointments { get; set; } = [];
+	public List<ServiceDto>? Services { get; set; }
+	public List<AppointmentDto> Appointments { get; set; } = [];
 
-    public Dictionary<int, string> ServicesDictionary { get; set; } = [];
+	public Dictionary<int, string> ServicesDictionary { get; set; } = [];
 
-    // Propriedades para o novo Agendamento
-    public DateTime SelectedDate { get; set; } = DateTime.Today; // Data padrão
-    public string SelectedTime { get; set; } = "09:00"; // Hora padrão
-    public int SelectedClientId { get; set; }
-    public int SelectedEmployeeId { get; set; }
-    public int SelectedServiceId { get; set; }
+	// Propriedades para o novo Agendamento
+	public DateTime SelectedDate { get; set; } = DateTime.Today;
+	public string? SelectedTime { get; set; }
+	public DateTime FilterDate { get; set; } = DateTime.Today;
+	private List<string> AvailableTimeSlots = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
 
-    private AppointmentRegistrationDto AppointmentModel { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadServicesAsync();
-        await LoadAppointmentsAsync();
-    }
+	private void SelectTime(string time)
+	{
+		SelectedTime = time;
+	}
 
-    private async Task LoadServicesAsync()
-    {
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("API");
-            var response = await httpClient.GetAsync("service/get_all");
+	public int SelectedClientId { get; set; }
+	public int SelectedEmployeeId { get; set; }
+	public int SelectedServiceId { get; set; }
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Services = JsonSerializer.Deserialize<List<ServiceDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+	private AppointmentRegistrationDto AppointmentModel { get; set; } = new();
 
-                if (Services != null)
-                {
-                    ServicesDictionary = Services.ToDictionary(e => e.ID, e => e.Name);
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadAppointmentsAsync(FilterDate);
+	}
 
-    private async Task LoadAppointmentsAsync()
-    {
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("API");
-            var response = await httpClient.GetAsync("appointment/get_all");
+	private async Task LoadAppointmentsAsync(DateTime date)
+	{
+		try
+		{
+			var httpClient = _httpClientFactory.CreateClient("API");
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Appointments = JsonSerializer.Deserialize<List<AppointmentDto>>(content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+			var dateString = date.ToString("yyyy-MM-dd");
 
-                // if (Appointments != null)
-                // {
-                //     ServicesDictionary = Services.ToDictionary(e => e.ID, e => e.Name);
-                // }
-            }
-            else
-            {
-                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
-        }
-    }
+			var response = await httpClient.GetAsync($"appointment/get_all?date={dateString}");
 
-    private async Task CreateAppointmentAsync()
-    {
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("API");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				Appointments = JsonSerializer.Deserialize<List<AppointmentDto>>(content,
+					new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
 
-            var response = await httpClient.PostAsJsonAsync("appointment/register", AppointmentModel);
-        }
-        catch(Exception ex)
-        {
-            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
-        }
-    }
+				// if (Appointments != null)
+				// {
+				//     ServicesDictionary = Services.ToDictionary(e => e.ID, e => e.Name);
+				// }
+			}
+			else
+			{
+				Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+		}
+	}
+
+	private async Task CreateAppointmentAsync()
+	{
+		try
+		{
+			if (TimeSpan.TryParse(SelectedTime, out var timeSpan))
+			{
+				var scheduleDateTime = SelectedDate.Date.Add(timeSpan);
+				AppointmentModel.ScheduledAt = scheduleDateTime;
+			}
+			AppointmentModel.ClientID = SelectedClientId;
+			AppointmentModel.EmployeeID = SelectedEmployeeId;
+			AppointmentModel.ServiceID = SelectedServiceId;
+
+			var httpClient = _httpClientFactory.CreateClient("API");
+			var response = await httpClient.PostAsJsonAsync("appointment/register", AppointmentModel);
+
+			if (response.IsSuccessStatusCode)
+			{
+				NavManager.NavigateTo(NavManager.Uri, true);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+		}
+	}
+
+	private async Task FilterDateChanged(DateTime newDate)
+	{
+		FilterDate = newDate;
+		await LoadAppointmentsAsync(newDate);
+	}
+	private void FormDateChanged(DateTime newDate)
+	{
+		SelectedDate = newDate;
+	}
 }

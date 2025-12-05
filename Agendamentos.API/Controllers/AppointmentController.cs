@@ -11,7 +11,7 @@ namespace Agendamentos.API.Controllers
     public class AppointmentController(APIContext context) : ControllerBase
     {
         private readonly APIContext _context = context;
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAppointmentAsync([FromBody] AppointmentRegistrationDto request)
         {
             Client? client = await _context.Clients.FindAsync(request.ClientID);
@@ -35,12 +35,23 @@ namespace Agendamentos.API.Controllers
         }
 
         [HttpGet("get_all")]
-        public async Task<IActionResult> GetAllAppointmentsAsync()
+        public async Task<IActionResult> GetAllAppointmentsAsync([FromQuery] DateTime? date)
         {
-            List<AppointmentDto>? appointments = await _context.Appointments
+            IQueryable<Agendamentos.Biblioteca.Appointment> query = _context.Appointments;
+
+            query = _context.Appointments
                 .Include(a => a.Client)
                 .Include(a => a.Employee)
-                .Include(a => a.Service)
+                .Include(a => a.Service);
+
+            if (date.HasValue)
+            {
+                var filterDate = date.Value.Date;
+
+                query = query.Where(a => a.ScheduledAt.Date == filterDate);
+            }
+
+            List<AppointmentDto>? appointments = await query
                 .Select(a => new AppointmentDto(a))
                 .ToListAsync();
 

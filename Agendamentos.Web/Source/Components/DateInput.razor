@@ -1,8 +1,9 @@
 ﻿<div>
 	<span style="color:var(--yellow);">@IconContent</span>
 	<input type="date"
-		value="@Today"
-		min="@(MinimumToday ? Today : "" )" />
+		   value="@Value.ToString("yyyy-MM-dd")"
+		   @onchange="OnDateChanged"
+		   min="@(MinimumToday ? Today : "" )" />
 	<KeyboardArrowDown />
 </div>
 
@@ -12,6 +13,23 @@
 	[Parameter]
 	public bool MinimumToday { get; set; }
 
+	[Parameter]
+	public DateTime Value { get; set; }
+
+	[Parameter]
+	public EventCallback<DateTime> ValueChanged { get; set; }
+
 	private string Today = DateTime.Today.ToString("yyyy-MM-dd");
+
+	private async Task OnDateChanged(ChangeEventArgs e)
+	{
+		if (DateTime.TryParse(e.Value?.ToString(), out var newValue))
+		{
+			Value = newValue;
+			// Isto é essencial para o FilterDateChanged funcionar no Home.razor
+			await ValueChanged.InvokeAsync(newValue);
+		}
+	}
+
 }
 

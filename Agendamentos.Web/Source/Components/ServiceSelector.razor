@@ -1,29 +1,29 @@
 ﻿@using System.Text.Json
 @rendermode InteractiveServer
 
-<div class="custom-select-employee">
+<div class="custom-select-service">
 	<div class="select-displayed-value"
-		 data-value="@SelectedId"
+		 data-value="default"
 		 @onclick="ToggleMenu"
 		 @onblur="HandleBlur"
-		 id="EmployeSelector" tabindex="0">
-
+		 id="ServiceSelector"
+		 tabindex="0">
 
 		<span style="color:var(--yellow);"><Badge /></span>
 		<span id="content" class="flex-grow-1 text_md">@_selectedName</span>
 		<KeyboardArrowDown />
 	</div>
 
-	<ul class="select-options-list @(_isMenuOpen ? "show":"")" id="EmployeeOptions">
-		@if (Employees.Count < 1)
+	<ul class="select-options-list @(_isMenuOpen ? "show":"")" id="ServiceOptions">
+		@if (Services.Count < 1)
 		{
-			<li data-value="0">Nenhum funcionário encontrado</li>
+			<li data-value="0">Nenhum serviço encontrado</li>
 		}
 		else
 		{
-			@foreach (var employee in Employees)
+			@foreach (var service in Services)
 			{
-				<li data-value="@employee.ID" @onclick="() => SelectEmployee(employee)">@employee.Name</li>
+				<li data-value="@service.ID" @onclick="() => SelectService(service)" tabindex="0">@service.Name</li>
 			}
 		}
 	</ul>
@@ -32,8 +32,7 @@
 @code {
 	[Inject]
 	private IHttpClientFactory _httpClientFactory { get; set; } = default!;
-	public List<EmployeeDto> Employees { get; set; } = [];
-
+	public List<ServiceDto> Services { get; set; } = [];
 
 	[Parameter]
 	public int SelectedId { get; set; }
@@ -41,25 +40,25 @@
 	[Parameter]
 	public EventCallback<int> SelectedIdChanged { get; set; }
 
-	private string _selectedName = "Selecione o Funcionário";
+	private string _selectedName = "Selecione o Serviço";
 	private bool _isMenuOpen = false;
 
 	protected override async Task OnInitializedAsync()
 	{
-		await LoadEmployessAsync();
+		await LoadServicesAsync();
 	}
 
-	private async Task LoadEmployessAsync()
+	private async Task LoadServicesAsync()
 	{
 		try
 		{
 			var httpClient = _httpClientFactory.CreateClient("API");
-			var response = await httpClient.GetAsync("employee/get_all");
+			var response = await httpClient.GetAsync("service/get_all");
 
 			if (response.IsSuccessStatusCode)
 			{
 				var content = await response.Content.ReadAsStringAsync();
-				Employees = JsonSerializer.Deserialize<List<EmployeeDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+				Services = JsonSerializer.Deserialize<List<ServiceDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 			}
 			else
 			{
@@ -72,12 +71,12 @@
 		}
 	}
 
-	private async Task SelectEmployee(EmployeeDto employee)
+	private async Task SelectService(ServiceDto service)
 	{
-		if (SelectedId != employee.ID)
+		if (SelectedId != service.ID)
 		{
-			SelectedId = employee.ID;
-			_selectedName = employee.Name;
+			SelectedId = service.ID;
+			_selectedName = service.Name;
 
 			await SelectedIdChanged.InvokeAsync(SelectedId);
 		}

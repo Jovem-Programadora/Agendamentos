@@ -2,6 +2,7 @@
 	<p class="horario">@Horario</p>
 	<p class="cliente">@Cliente</p>
 	<p class="func">@Funcionario</p>
+	<p class="service">@Service</p>
 	<p class="valor">@PrecoTotal</p>
 </div>
 
@@ -12,6 +13,8 @@
 	public string Cliente { get; set; } = "Cliente";
 	[Parameter]
 	public string Funcionario { get; set; } = "Funcionario";
+	[Parameter]
+	public string Service { get; set; } = "Serviço";
 	[Parameter]
 	public string PrecoTotal { get; set; } = "Total";
 }

@@ -1,6 +1,7 @@
 ﻿.custom-select-employee {
     position: relative;
     user-select: none;
+    outline: none;
 }
 
 .select-displayed-value {
@@ -13,6 +14,7 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    outline: none;
 }
 
 .select-options-list {
