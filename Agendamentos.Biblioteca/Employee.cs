@@ -12,8 +12,6 @@ public class Employee : User
     {
         Name = dto.Name;
         Email = dto.Email;
-        Phone = dto.Phone;
-        Birth = dto.Birth;
         Password = dto.Password;
     }
 

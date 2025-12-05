@@ -1,4 +1,6 @@
-﻿namespace Agendamentos.Biblioteca;
+﻿using Agendamentos.Biblioteca.DTOs;
+
+namespace Agendamentos.Biblioteca;
 
 public class Appointment
 {
@@ -11,5 +13,14 @@ public class Appointment
     public Client Client { get; set; } = new ();
     public Employee Employee { get; set; } = new();
     public Service Service { get; set; } = new();
+
+    public Appointment() { }
+    public Appointment(AppointmentRegistrationDto dto)
+    {
+        ClientID = dto.ClientID;
+        EmployeeID = dto.EmployeeID;
+        ServiceID = dto.ServiceID;
+        ScheduledAt = dto.ScheduledAt;
+    }
 
 }

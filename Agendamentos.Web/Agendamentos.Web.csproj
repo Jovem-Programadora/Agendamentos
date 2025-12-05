@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>432c7293-e918-4a49-8453-c77fd3d55dd8</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Agendamentos.Biblioteca\Agendamentos.Biblioteca.csproj" />
+  </ItemGroup>
 
 </Project>

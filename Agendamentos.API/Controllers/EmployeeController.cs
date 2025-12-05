@@ -16,11 +16,10 @@ public class EmployeeController(APIContext context) : ControllerBase
     public async Task<IActionResult> RegisterEmployeeAsync([FromBody] EmployeeRegistrationDto request)
     {
         Employee? employee = await _context.Employees
-            .FirstOrDefaultAsync(e => e.Email.Equals(request.Email) || e.Phone.Equals(request.Phone));
+            .FirstOrDefaultAsync(e => e.Email.Equals(request.Email));
         if (employee is not null) return StatusCode(400, "Funcionário já registrado");
 
         employee = new Employee(request);
-
 
         await _context.Employees.AddAsync(employee);
         await _context.SaveChangesAsync();
@@ -45,10 +44,8 @@ public class EmployeeController(APIContext context) : ControllerBase
         Employee? employee = await _context.Employees.FindAsync(id);
         if (employee is null) return StatusCode(404, "Funcionário não encontrado");
 
-        employee.Description = request.Description;
         employee.Email = request.Email;
         employee.Name = request.Name;
-        employee.Phone = request.Phone;
 
         try
         {

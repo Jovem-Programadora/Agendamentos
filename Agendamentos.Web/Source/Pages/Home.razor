@@ -1,4 +1,6 @@
 ﻿@using Agendamentos.Web.Source.Components
+@using System.Text.Json
+@using System.Threading.Tasks
 @page "/"
 
 <PageTitle>Agendamentos</PageTitle>
@@ -43,29 +45,21 @@
 
             <div id="service">
                 <h1 class="title_md gray-200">Serviço</h1>
-                <Selector Options="@services" Placeholder="Selecione um serviço">
+                @* <Selector Options="@ServicesDictionary" Placeholder="Selecione um serviço">
                     <IconContent>
                         <Concierge />
                     </IconContent>
-                </Selector>
+                </Selector> *@
             </div>
 
             <div id="employee">
                 <h1 class="title_md gray-200">Funcionário</h1>
-                <Selector Options="@employess" Placeholder="Selecione um funcionário">
-                    <IconContent>
-                        <Badge />
-                    </IconContent>
-                </Selector>
+                <EmployeSelector />
             </div>
 
             <div id="client">
                 <h1 class="title_md gray-200">Cliente</h1>
-                <TextInput Placeholder="Nome do Cliente">
-                    <IconContent>
-                        <AccountBox />
-                    </IconContent>
-                </TextInput>
+                <ClientSelector />
             </div>
 
 
@@ -96,9 +90,21 @@
 
             <div id="lista">
                 <span class="title_md gray-100"><AppointmentItem Horario="Horário" Cliente="Cliente" Funcionario="Funcionário" /></span>
-                @for (int contador = 1; contador < 13; contador++)
+                @if (Appointments.Count < 1)
                 {
-                    <span class="text_md gray-200">	<AppointmentItem Horario="10:00" Cliente="Gabriel" Funcionario="Carol" PrecoTotal="R$ 279,00" /> </span>
+                    <span class="text_md gray-200">Nenhum agendamento encontrado</span>
+                }
+                else
+                {
+                    foreach (var appointment in Appointments)
+                    {
+                        <span class="text_md gray-200">
+                            <AppointmentItem Horario="@appointment.ScheduledAt.ToString("t")"
+                                             Cliente="@appointment.ClientName"
+                                             Funcionario="@appointment.EmployeeName"
+                                             PrecoTotal="@appointment.TotalPrice.ToString("C")" />
+                        </span>
+                    }
                 }
             </div>
 
@@ -109,23 +115,97 @@
 </div>
 
 @code {
-    private Dictionary<int, string> employess = new()
+    [Inject]
+    private IHttpClientFactory _httpClientFactory { get; set; } = default!;
+
+    public List<ServiceDto>? Services { get; set; }
+    public List<AppointmentDto> Appointments { get; set; } = [];
+
+    public Dictionary<int, string> ServicesDictionary { get; set; } = [];
+
+    // Propriedades para o novo Agendamento
+    public DateTime SelectedDate { get; set; } = DateTime.Today; // Data padrão
+    public string SelectedTime { get; set; } = "09:00"; // Hora padrão
+    public int SelectedClientId { get; set; }
+    public int SelectedEmployeeId { get; set; }
+    public int SelectedServiceId { get; set; }
+
+    private AppointmentRegistrationDto AppointmentModel { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
     {
-        { 1, "Gabriel"},
-        { 2, "Daniel"},
-        { 3, "Carlos"},
-        { 4, "Leonardo"},
-        { 5, "Leoncio"},
-        { 6, "Leonidas"},
-    };
-    private Dictionary<int, string> services = new() 
-    { 
-        { 1, "Cabeleireiro" },
-        { 2, "Manicure" },
-        { 3, "Pedicure" }, 
-        { 4, "Sobramcelha" }, 
-        { 5, "Tratamento Facial" }, 
-        { 6, "Banho e Tosa" }, 
-        { 7, "Antipulga" }, 
-    };
+        await LoadServicesAsync();
+        await LoadAppointmentsAsync();
+    }
+
+    private async Task LoadServicesAsync()
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("API");
+            var response = await httpClient.GetAsync("service/get_all");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Services = JsonSerializer.Deserialize<List<ServiceDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (Services != null)
+                {
+                    ServicesDictionary = Services.ToDictionary(e => e.ID, e => e.Name);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+        }
+    }
+
+    private async Task LoadAppointmentsAsync()
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("API");
+            var response = await httpClient.GetAsync("appointment/get_all");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Appointments = JsonSerializer.Deserialize<List<AppointmentDto>>(content,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+
+                // if (Appointments != null)
+                // {
+                //     ServicesDictionary = Services.ToDictionary(e => e.ID, e => e.Name);
+                // }
+            }
+            else
+            {
+                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+        }
+    }
+
+    private async Task CreateAppointmentAsync()
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("API");
+
+            var response = await httpClient.PostAsJsonAsync("appointment/register", AppointmentModel);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+        }
+    }
 }

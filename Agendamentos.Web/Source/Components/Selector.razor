@@ -52,6 +52,6 @@
     public RenderFragment? IconContent { get; set; }
     [Parameter]
     public string? Placeholder { get; set; }
-    [Parameter]
+    [Parameter, EditorRequired]
     public required Dictionary<int, string> Options { get; set; }
 }

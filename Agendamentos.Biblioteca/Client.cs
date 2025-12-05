@@ -13,8 +13,6 @@ public class Client : User
     {
         Name = dto.Name;
         Email = dto.Email;
-        Phone = dto.Phone;
-        Birth = dto.Birth;
         CanReceiveEmail = dto.CanReceiveEmail;
     }
 }

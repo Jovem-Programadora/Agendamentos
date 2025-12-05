@@ -1,0 +1,86 @@
+﻿@using System.Text.Json
+<div class="custom-select-employee">
+    <div class="select-displayed-value" data-value="default" id="EmployeSelector" tabindex="0">
+        <span style="color:var(--yellow);"><Badge /></span>
+        <span id="content" class="flex-grow-1 text_md">Selecione o Funcionário</span>
+        <KeyboardArrowDown />
+    </div>
+
+    <ul class="select-options-list" id="EmployeeOptions">
+        @if (Employees.Count < 1)
+        {
+            <li data-value="default">Nenhum cliente encontrado</li>
+        }
+        else
+        {
+            @foreach (var employee in Employees)
+            {
+                <li data-value="@employee.ID">@employee.Name</li>
+            }
+        }
+    </ul>
+</div>
+
+<script>
+    const EmployeSelector = document.getElementById("EmployeSelector");
+    const EmployeeOptions = document.getElementById("EmployeeOptions");
+
+    EmployeSelector.addEventListener("click", () => {
+        EmployeeOptions.classList.toggle("show");
+    });
+
+    document.addEventListener("click", (event) => {
+        if(!event.target.closest(".custom-select-employee")){
+            EmployeeOptions.classList.remove('show');
+        }
+    });
+
+    EmployeeOptions.querySelectorAll("li").forEach(option => {
+        option.addEventListener("click", () => {
+            const newText = option.textContent.trim();
+            const newValue = option.getAttribute("data-value");
+
+           EmployeSelector.querySelector("span#content").textContent = newText;
+           EmployeSelector.setAttribute("data-value", newValue);
+
+           EmployeeOptions.classList.remove("show");
+
+           EmployeSelector.blur();
+        });
+    })
+</script>
+
+@code {
+    [Inject]
+    private IHttpClientFactory _httpClientFactory { get; set; } = default!;
+
+    public List<EmployeeDto> Employees { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEmployessAsync();
+    }
+
+    private async Task LoadEmployessAsync()
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("API");
+            var response = await httpClient.GetAsync("employee/get_all");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Employees = JsonSerializer.Deserialize<List<EmployeeDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+            }
+            else
+            {
+                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+        }
+    }
+}

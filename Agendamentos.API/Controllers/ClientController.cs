@@ -16,7 +16,7 @@ public class ClientController(APIContext context) : ControllerBase
     [HttpPost("register/")]
     public async Task<IActionResult> RegisterClientAsync([FromBody] ClientRegistrationDto request)
     {
-        Client? client = await _context.Clients.FirstOrDefaultAsync(c => c.Email.Equals(request.Email) || c.Phone.Equals(request.Phone));
+        Client? client = await _context.Clients.FirstOrDefaultAsync(c => c.Email.Equals(request.Email));
         if (client is not null) return StatusCode(400, "Cliente já existe no sistema");
         client = new(request);
         await _context.Clients.AddAsync(client);
@@ -42,10 +42,8 @@ public class ClientController(APIContext context) : ControllerBase
         Client? client = await _context.Clients.FindAsync(id);
         if (client is null) return StatusCode(404, "Cliente não encontrado");
 
-        client.Description = request.Description;
         client.Email = request.Email;
         client.Name = request.Name;
-        client.Phone = request.Phone;
 
         try
         {

@@ -20,9 +20,7 @@ public class APIContext(DbContextOptions<APIContext> optionsBuilder) : DbContext
 
         // Configurar as colunas unicas
         modelBuilder.Entity<Client>().HasIndex(c => c.Email).IsUnique();
-        modelBuilder.Entity<Client>().HasIndex(c => c.Phone).IsUnique();
         modelBuilder.Entity<Employee>().HasIndex(e => e.Email).IsUnique();
-        modelBuilder.Entity<Employee>().HasIndex(e => e.Phone).IsUnique();
         modelBuilder.Entity<Service>().HasIndex(s => s.Name).IsUnique();
 
         // Configurar as colunas não nulas

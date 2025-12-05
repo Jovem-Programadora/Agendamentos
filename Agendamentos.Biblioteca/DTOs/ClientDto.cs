@@ -8,13 +8,10 @@ public class ClientDto : UserDto
 
     public ClientDto(Client client)
     {
-        Birth = client.Birth;
-        CanReceiveEmail = client.CanReceiveEmail;
-        Description = client.Description;
-        Email = client.Email;
         ID = client.ID;
         Name = client.Name;
-        Phone = client.Phone;
+        Email = client.Email;
+        CanReceiveEmail = client.CanReceiveEmail;
     }
 }
 

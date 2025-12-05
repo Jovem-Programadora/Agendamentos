@@ -12,6 +12,18 @@ namespace Agendamentos.Web
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            // HttpClient
+            var baseAddress = new Uri(builder.Configuration["API_URI"] ?? "https://localhost:7134");
+
+            builder.Services.AddHttpClient("API", client =>
+            {
+                client.BaseAddress = baseAddress;
+
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("API"));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

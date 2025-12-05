@@ -1,0 +1,68 @@
+﻿.custom-select-employee {
+    position: relative;
+    user-select: none;
+}
+
+.select-displayed-value {
+    background-color: transparent;
+    color: var(--gray-400); /* Cor do texto da caixa fechada */
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--gray-500);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.select-options-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    background-color: var(--gray-700);
+    color: var(--gray-200);
+    border: 1px solid #555;
+    border-top: none;
+    display: none;
+}
+
+    .select-options-list.show {
+        display: block;
+    }
+
+    .select-options-list li {
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .select-options-list li:hover {
+            background-color: #404040;
+        }
+
+
+.select-displayed-value:focus-within {
+    border: 1px solid var(--yellow);
+}
+
+li:hover{
+    background-color: var(--gray-500);
+    color: var(--yellow);
+}
+
+svg {
+    color: var(--yellow);
+}
+
+IconContent {
+    color: var(--yellow);
+}

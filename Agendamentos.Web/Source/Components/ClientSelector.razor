@@ -1,0 +1,88 @@
+﻿@using System.Text.Json
+<div class="custom-select-client">
+    <div class="select-displayed-value" data-value="default" id="ClientSelector" tabindex="0">
+        <span style="color:var(--yellow);"><AccountBox /></span>
+        <span id="content" class="flex-grow-1 text_md">Selecione o Cliente</span>
+        <KeyboardArrowDown />
+    </div>
+
+    <ul class="select-options-list" id="ClientOptions">
+        @if (Clients.Count < 1)
+        {
+            <li data-value="default">Nenhum cliente encontrado</li>
+        }
+        else
+        {
+            @foreach (var client in Clients)
+            {
+                <li data-value="@client.ID">@client.Name</li>
+            }
+        }
+    </ul>
+</div>
+
+<script>
+    const ClientSelector = document.getElementById("ClientSelector");
+    const ClientOptions = document.getElementById("ClientOptions");
+
+    ClientSelector.addEventListener("click", () => {
+        ClientOptions.classList.toggle("show");
+    });
+
+    document.addEventListener("click", (event) => {
+        if(!event.target.closest(".custom-select-client")){
+         document.querySelectorAll('.select-options-list.show').forEach(openMenu => {
+                openMenu.classList.remove('show');
+            });
+        }
+    });
+
+    ClientOptions.querySelectorAll("li").forEach(option => {
+        option.addEventListener("click", () => {
+            const newText = option.textContent.trim();
+            const newValue = option.getAttribute("data-value");
+
+           ClientSelector.querySelector("span#content").textContent = newText;
+           ClientSelector.setAttribute("data-value", newValue);
+
+           ClientOptions.classList.remove("show");
+
+           ClientSelector.blur();
+        });
+    })
+</script>
+
+@code {
+    [Inject]
+    private IHttpClientFactory _httpClientFactory { get; set; } = default!;
+
+    public List<ClientDto> Clients { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadClientsAsync();
+    }
+
+    private async Task LoadClientsAsync()
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("API");
+            var response = await httpClient.GetAsync("client/get_all");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Clients = JsonSerializer.Deserialize<List<ClientDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+            }
+            else
+            {
+                Console.WriteLine($"Erro ao carregar os dados: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve uma exceção ao carregar funcionários: ${ex.Message}");
+        }
+    }
+}
