@@ -15,8 +15,6 @@ public class EmployeeDto : UserDto
         ID = employee.ID;
         Name = employee.Name;
         Phone = employee.Phone;
-        RoleID = employee.RoleID;
-        RoleName = employee.Role.Name;
     }
 }
 

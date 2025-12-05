@@ -1,7 +1,7 @@
 ﻿/* Referencia por tag */
 button {
     /* Aparencia */
-    width: 340px; /* Largura do botão */
+    width: 100%; /* Largura do botão */
     height: 54px; /* Altura do botão */
     padding: 0px 16px; /* Padding 0px superior/inferior | 16px direita/esquerda */
     background-color: #B8952E; /* Cor do botão */

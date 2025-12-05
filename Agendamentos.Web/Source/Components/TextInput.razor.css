@@ -1,6 +1,6 @@
 ﻿div {
     /* Layout */
-    width: 340px;
+    width: 100%;
     padding: 12px;
     display: flex;
     min-height: 48px;

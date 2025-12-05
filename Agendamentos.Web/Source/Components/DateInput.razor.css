@@ -1,6 +1,5 @@
 ﻿div {
     min-width: 152px;
-    max-width: 340px;
     max-height: 48px;
     border: 1px solid var(--gray-500);
     border-radius: 8px;

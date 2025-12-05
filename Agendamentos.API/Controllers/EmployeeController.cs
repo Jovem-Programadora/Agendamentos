@@ -4,8 +4,6 @@ using Agendamentos.Biblioteca.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
-using System.Data.Common;
-using System.Threading.Tasks;
 
 namespace Agendamentos.API.Controllers;
 
@@ -21,13 +19,7 @@ public class EmployeeController(APIContext context) : ControllerBase
             .FirstOrDefaultAsync(e => e.Email.Equals(request.Email) || e.Phone.Equals(request.Phone));
         if (employee is not null) return StatusCode(400, "Funcionário já registrado");
 
-        Role? role = await _context.Roles.FindAsync(request.RoleID);
-        if (role is null) return StatusCode(404, "Cargo não encontrado");
-
-        employee = new Employee(request)
-        {
-            Role = role
-        };
+        employee = new Employee(request);
 
 
         await _context.Employees.AddAsync(employee);
@@ -40,7 +32,6 @@ public class EmployeeController(APIContext context) : ControllerBase
     public async Task<IActionResult> GetAllEmployeesAsync()
     {
         List<EmployeeDto>? employees = await _context.Employees
-            .Include(e => e.Role)
             .Select(e => new EmployeeDto(e))
             .ToListAsync();
         if (employees is null || employees.Count < 1) return StatusCode(404, "Nenhum funcionário foi encontrado");
@@ -58,7 +49,6 @@ public class EmployeeController(APIContext context) : ControllerBase
         employee.Email = request.Email;
         employee.Name = request.Name;
         employee.Phone = request.Phone;
-        employee.RoleID = request.RoleID;
 
         try
         {

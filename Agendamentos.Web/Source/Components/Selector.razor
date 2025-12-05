@@ -1,13 +1,57 @@
-﻿<div class="content">
-	<span style="color:var(--yellow);">@IconContent</span>
-	<select>
-		<option disabled selected>@Placeholder</option>
-	</select>
+﻿<div class="custom-select">
+    <div class="select-displayed-value" data-value="default" id="@UniqueSelectId" tabindex="0">
+        <span style="color:var(--yellow);">@IconContent</span>
+        <span id="content" class="flex-grow-1 text_md">@Placeholder</span>
+        <KeyboardArrowDown />
+    </div>
+
+    <ul class="select-options-list" id="@UniqueOptionsId">
+        @foreach (var option in Options)
+        {
+            <li data-value="@option.Key">@option.Value</li>
+        }
+
+    </ul>
 </div>
 
+<script>
+    const @("selectBox_" + UniqueSelectId) = document.getElementById("@UniqueSelectId");
+    const @("optionsList_" + UniqueOptionsId) = document.getElementById("@UniqueOptionsId");
+
+    @("selectBox_" + UniqueSelectId).addEventListener("click", () => {
+        @("optionsList_" + UniqueOptionsId).classList.toggle("show");
+    });
+
+    document.addEventListener("click", (event) => {
+        if(!event.target.closest(".custom-select")){
+         document.querySelectorAll('.select-options-list.show').forEach(openMenu => {
+                openMenu.classList.remove('show');
+            });
+        }
+    });
+
+    @("optionsList_" + UniqueOptionsId).querySelectorAll("li").forEach(option => {
+        option.addEventListener("click", () => {
+            const newText = option.textContent.trim();
+            const newValue = option.getAttribute("data-value");
+
+           @("selectBox_" + UniqueSelectId).querySelector("span#content").textContent = newText;
+           @("selectBox_" + UniqueSelectId).setAttribute("data-value", newValue);
+
+           @("optionsList_" + UniqueOptionsId).classList.remove("show");
+
+           @("selectBox_" + UniqueSelectId).blur();
+        });
+    })
+</script>
+
 @code {
-	[Parameter]
-	public RenderFragment? IconContent { get; set; }
-	[Parameter]
-	public string? Placeholder { get; set; }
+    private string UniqueSelectId = Guid.NewGuid().ToString("N");
+    private string UniqueOptionsId = Guid.NewGuid().ToString("N");
+    [Parameter]
+    public RenderFragment? IconContent { get; set; }
+    [Parameter]
+    public string? Placeholder { get; set; }
+    [Parameter]
+    public required Dictionary<int, string> Options { get; set; }
 }
